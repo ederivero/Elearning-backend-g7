@@ -25,6 +25,7 @@ def calcularIGV(valor):
     return valorIncluidoIGV
 
 
+
 precio = 100
 precioConIGV = calcularIGV(precio)
 print(precioConIGV)
@@ -142,3 +143,26 @@ def recibirAlumnos(clase, *alumnos):
 
 recibirAlumnos('Eduardo', 'Juan Carlos', 'Jenny', 'Lily', 'Manuel', 'Cristian', 'Wilson', 'Alejandro')
 recibirAlumnos('Eduardo', 'Juan Carlos', 'Lily', 'Manuel', 'Wilson', 'Alejandro')
+
+# en la forma tradicional seria de la siguiente manera
+def sumatoria(numero1, numero2): return numero1 + numero2
+respuesta = sumatoria(10,5)
+print(respuesta)
+
+# x = (param1, param2) => {...}
+# Funcion anonima (lambda function) en python
+sumatoria = lambda numero1, numero2: numero1 + numero2
+respuesta = sumatoria(10,5)
+print(respuesta)
+
+def sumatoriaNumeros(numero1, *numeros):
+    respuesta = 0
+    for numero in numeros:
+        respuesta += numero
+    respuesta += numero1
+    return respuesta
+# sumatoria = lambda numero1, *numero: numero1 + for valor in numero: 
+respuesta = sumatoriaNumeros(10,5,6,7)
+print(respuesta)
+
+calcularIGVLambda = lambda valor : valor * 1.18
