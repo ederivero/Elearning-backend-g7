@@ -10,7 +10,7 @@ class Vehiculo:
         self.modelo = modelo
         # si queremos indicar que un atributo de la clase va a ser privado (no va a poder ser accedido desde fuera de la clase) tendremos que colorar doble guion bajo al inicio del nombre del atributo
         self.__serie = marca+modelo
-        # TODO: explicar el tipo PROTECTED
+        # Protegidos en python tienen un comportamiento diferente y mas que todo sirve para que al momento de hacer herencia no se modifique los valores al crear el mismo atributo en las clase hijas
         self._serie2 = marca+modelo
     
     def mostrarSerie(self):
