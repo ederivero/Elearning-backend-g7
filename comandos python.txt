@@ -1,0 +1,15 @@
+pip list > lista todas las librerias que tenemos instaladas
+
+python -m venv NOMBRE > creara un entorno virtual en la ubicacion donde estemos
+
+NOMBRE/Scrips/activate > levanta el entorno virtual en la terminal si esta es CMD, powershell o terminal de windows.
+
+source NOMBRE/Scrips/activate > levanta el entorno virtual en la terminal si esta es GIT BASH, terminales de S.O. linux o macOS
+
+pip freeze > lista solamente las librerias instaladas manualmente
+
+pip freeze > requirements.txt  >> guarda el output de ese comando en el archivo requirements.txt
+
+pip install -r requirements.txt > instala todas las librerias usando como fuente el archivo donde listamos todas las librerias
+
+deactivate > desactiva el entorno virtual
