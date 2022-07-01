@@ -70,9 +70,18 @@ UPDATE productos SET nombre = 'Cebolla China' WHERE nombre = 'Cebolla';
 
 -- Desactivar el modo seguro que lo que hace es que ahora podemos hacer actualizaciones sin la
 -- necesidad de tener en la condicion a una columna UNIQUE o que sea una KEY
--- No se recomienda desactivar porque podria llevar a hacer modificaciones masivas sin la 
+-- No se recomienda desactivar porque podria llevar a hacer modificaciones (o eliminaciones) masivas sin la 
 -- posibilidad de deshacer esos cambios
 SET SQL_SAFE_UPDATES = false;
 
+
+USE prueba;
+-- DELETE > Sirve para remover registros que ya no nos sirven
+DELETE FROM productos WHERE nombre = 'Aguaymanto';
+
+
+
+
 -- DDL Data Definition Language (Lenguaje de Definicion de Datos)
 -- Definir la estructura que vamos a manejar en la bd (crear, modificar y eliminar TABLAS o BD)
+
