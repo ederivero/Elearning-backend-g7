@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
@@ -98,3 +98,13 @@ def headers():
         'message': 'Unauthorized',
         'content': None
     }), 401
+
+@app.route('/button')
+def button():
+    return '<button type="button">Soy un boton</button>'
+
+
+@app.route('/website')
+def website():
+    numero = 10
+    return render_template('index.html', numero=numero)
