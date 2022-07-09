@@ -4,11 +4,16 @@ from models.participante import Participante
 from dotenv import load_dotenv
 # environ > me devuelve todas las variables de entorno en forma de un diccionario
 from os import environ
+from controllers.participante import ParticipanteController
+from flask_restful import Api
+
 
 # carga todas las variables declaradas en el archivo .env como si fuesen variables de entorno para que puedan ser accedidas desde el metodo 'environ'
 load_dotenv()
 
 app = Flask(__name__)
+api = Api(app)
+
 # URI dialect://usuario:password@host:puerto/base_de_datos
 app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
 
@@ -20,6 +25,16 @@ conexion.init_app(app)
 # se ejecuta la conexion y se crearan las tablas PERO si no hay ningun tabla a crear entonces no lanzara error de credenciales invalidas
 conexion.create_all(app=app)
 
+
+@app.route('/', methods=['GET'])
+def inicio():
+    return {
+        'message': 'Bienvenido a mi API de conciertos'
+    }
+
+
+# Definicion de rutas usando Flask Restful
+api.add_resource(ParticipanteController, '/participantes')
 
 if __name__ == '__main__':
     app.run(debug=True)
