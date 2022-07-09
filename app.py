@@ -6,14 +6,14 @@ from dotenv import load_dotenv
 from os import environ
 from controllers.participante import ParticipanteController
 from flask_restful import Api
-
+from flask_cors import CORS
 
 # carga todas las variables declaradas en el archivo .env como si fuesen variables de entorno para que puedan ser accedidas desde el metodo 'environ'
 load_dotenv()
 
 app = Flask(__name__)
 api = Api(app)
-
+CORS(app)
 # URI dialect://usuario:password@host:puerto/base_de_datos
 app.config['SQLALCHEMY_DATABASE_URI'] = environ['DATABASE_URL']
 

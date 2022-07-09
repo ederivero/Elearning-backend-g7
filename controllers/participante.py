@@ -39,11 +39,21 @@ class ParticipanteController(Resource):
             # Intenta realizar todo esto
             data_serializada = ParticipanteRequestDTO().load(data)
             print(data_serializada)
+            # **data_serializada > convertimos ese diccionario en parametros
+            # { 'nombre': 'fabio' } > nombre = 'fabio'
+            nuevoParticipante = Participante(**data_serializada)
+            # empezamos una nueva transaccion
+            conexion.session.add(nuevoParticipante)
+            # una vez que queremos guardar de manera permanente los cambios (insercion actualizacion o eliminacion) de los registros haremos un commit
+            conexion.session.commit()
+            print('se agrego el participante')
             return {
-                'message': 'Ingreso al post'
+                'message': 'Participante agregado exitosamente'
             }
         except Exception as e:
             # si fallas entonces entraras al except (se emitira una exception)
+            # para  deshacer los cambios de la transaccion hacemos uso del rollback lo que dejara sin efecto todos los cambios de los registros que realicemos
+            conexion.session.rollback()
             return {
                 'message': 'Error al ingresar el participante',
                 'content': e.args
