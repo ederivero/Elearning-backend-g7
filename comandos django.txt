@@ -7,3 +7,6 @@ python manage.py showmigrations > muestra todas las migraciones creadas en el pr
 python manage.py migrate > ejecuta todas las migraciones PENDIENTES a realizarse en la BD
 
 python manage.py sqlmigrate NOMBRE_APP NUM_MIGRACION > retornara la sentencia SQL de la migracion que se va a efectuar en la base de datos
+
+
+python manage.py makemigrations NOMBRE_APP --name NOMBRE_MIGRACION > creara una nueva migracion con el nombre determinado en la carpeta migrations

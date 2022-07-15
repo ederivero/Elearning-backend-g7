@@ -1,2 +1,3 @@
 entorno_flask/
 entorno_django/
+.env
