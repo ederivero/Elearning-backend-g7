@@ -1,9 +1,10 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework.generics import ListAPIView
-
-from .serializers import PruebaSerializer
+from rest_framework.generics import ListAPIView, ListCreateAPIView
+from .serializers import PruebaSerializer, TareaSerializer
+from .models import Tarea
+from rest_framework import status
 
 @api_view(http_method_names=['GET', 'POST'])
 def inicio(request: Request):
@@ -15,6 +16,7 @@ def inicio(request: Request):
 
 class PruebaView(ListAPIView):
     # en cualquiera de las clases genericas se necesita declarar los atributos 
+    # queryset > resultado de la consulta de nuestra iteraccion con nuestro ORM y este se usa para los metodos de devolucion (GET)
     queryset = [{
         'nombre': 'eduardo',
         'apellido':'de rivero'
@@ -23,4 +25,37 @@ class PruebaView(ListAPIView):
         'apellido': 'gonzales'
     }]
     # serializador es un DTO (Data Transfer Object)
+    # serializer_class > lo que va a convertir la informacion que llega desde el cliente y tbn la informacion que retornaremos hacia el cliente
     serializer_class = PruebaSerializer
+
+# admitir un GET y un POST
+class TareasView(ListCreateAPIView):
+    queryset = Tarea.objects.all() # SELECT * FROM tareas;
+    serializer_class = TareaSerializer
+
+    def get(self, request):
+        # cuando se modifica el metodo por algun comportamiento diferente entonces DRF ya ahora obedecera a este comportamiento y es ahi cuando ya podemos dejar de utilizar los atributos queryset y serializer_class
+        # primero traigo las tareas
+        # get_queryset() > manda a llamar a la ejecucion de nuestro queryset
+        tareas = self.get_queryset()
+        # luego lo paso al serializador para convertirlas a tipos de datos genericos
+        tareasSerializada = self.serializer_class(instance=tareas, many=True)
+
+        return Response(data={
+            'message':'Las tareas son', 
+            'content': tareasSerializada.data
+        },status=status.HTTP_200_OK)
+    
+
+    def post(self, request: Request):
+        body = request.data # body
+        instanciaSerializador = self.serializer_class(data=body)
+        validacion = instanciaSerializador.is_valid(raise_exception=True) # me retornara True si es valida, si no es valida emitira un error
+        if validacion == True:
+            # save > guarda la informacion en la base de datos
+            instanciaSerializador.save()
+
+            return Response(data=instanciaSerializador.data, status=status.HTTP_201_CREATED)
+
+
+            
