@@ -27,4 +27,3 @@ class Tarea(models.Model):
         db_table = 'tareas'
         # el ordenamiento sera de manera descendente por la columna fecha_vencimiento
         ordering = ['-fechaVencimiento']
-        

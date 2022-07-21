@@ -1,0 +1,1 @@
+web: gunicorn tareas.wsgi
