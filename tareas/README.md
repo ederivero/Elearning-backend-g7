@@ -10,3 +10,8 @@
 - Hacemos una conexion remota con: heroku git:remote -a <nombre-de-la-aplicacion>
 - Desplegamos el proyecto con: git add . && git commit -m "Inicializacion" && git push heroku <nombre-de-la-rama>
 - Hacemos una migración de la base de datos con: heroku run python manage.py migrate
+
+# Configuración de CORS
+- Url: https://pypi.org/project/django-cors-headers/
+- Configuramos nuestra aplicacion para que pueda ser consumida desde cualquier lugar
+- Para eso primero instalamos el paquete cors: pip install django-cors-headers
