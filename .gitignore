@@ -2,3 +2,4 @@ entorno_flask/
 entorno_django/
 .env
 venv/
+__pycache__/
