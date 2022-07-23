@@ -150,3 +150,10 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    # Modifica la duracion que tendra la token de acceso, para modificar otras propiedades de la libreria: https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
+    'ACCESS_TOKEN_LIFETIME' : timedelta(hours=1,minutes=10, seconds=5)
+}
