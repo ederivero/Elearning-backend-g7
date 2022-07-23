@@ -35,11 +35,13 @@ class TareasView(ListCreateAPIView):
     serializer_class = TareaSerializer
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: Request):
         # cuando se modifica el metodo por algun comportamiento diferente entonces DRF ya ahora obedecera a este comportamiento y es ahi cuando ya podemos dejar de utilizar los atributos queryset y serializer_class
         # primero traigo las tareas
         # get_queryset() > manda a llamar a la ejecucion de nuestro queryset
-        tareas = self.get_queryset()
+        usuarioId = request.user.id
+        # SELECT * FROM TAREAS WHERE usuario_id = ....;
+        tareas = Tarea.objects.filter(usuarioId = usuarioId).all()
         # luego lo paso al serializador para convertirlas a tipos de datos genericos
         tareasSerializada = self.serializer_class(instance=tareas, many=True)
 
@@ -51,14 +53,13 @@ class TareasView(ListCreateAPIView):
 
     def post(self, request: Request):
         body = request.data # body
-        print(request.user)
+        # request.user > devolvera toda la instancia del usuario que esta en la token (basandose en su ID) si no hay un usuario entonces sera un AnonymousUser 
+        print(request.user.nombre)
+        body['usuarioId'] = request.user.id # modifico el body entrante y le agrego el ID del usuario que actualmente esta haciendo la peticion
         instanciaSerializador = self.serializer_class(data=body)
         validacion = instanciaSerializador.is_valid(raise_exception=True) # me retornara True si es valida, si no es valida emitira un error
         if validacion == True:
             # save > guarda la informacion en la base de datos
-            # instanciaSerializador.save()
+            instanciaSerializador.save()
 
-            return Response(data=instanciaSerializador.data, status=status.HTTP_201_CREATED)
-
-
-            
+            return Response(data=instanciaSerializador.data, status=status.HTTP_201_CREATED)            
