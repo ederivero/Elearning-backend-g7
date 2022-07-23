@@ -5,6 +5,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView
 from .serializers import PruebaSerializer, TareaSerializer
 from .models import Tarea
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(http_method_names=['GET', 'POST'])
 def inicio(request: Request):
@@ -32,6 +33,7 @@ class PruebaView(ListAPIView):
 class TareasView(ListCreateAPIView):
     queryset = Tarea.objects.all() # SELECT * FROM tareas;
     serializer_class = TareaSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         # cuando se modifica el metodo por algun comportamiento diferente entonces DRF ya ahora obedecera a este comportamiento y es ahi cuando ya podemos dejar de utilizar los atributos queryset y serializer_class
@@ -49,11 +51,12 @@ class TareasView(ListCreateAPIView):
 
     def post(self, request: Request):
         body = request.data # body
+        print(request.user)
         instanciaSerializador = self.serializer_class(data=body)
         validacion = instanciaSerializador.is_valid(raise_exception=True) # me retornara True si es valida, si no es valida emitira un error
         if validacion == True:
             # save > guarda la informacion en la base de datos
-            instanciaSerializador.save()
+            # instanciaSerializador.save()
 
             return Response(data=instanciaSerializador.data, status=status.HTTP_201_CREATED)
 
