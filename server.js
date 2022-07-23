@@ -45,10 +45,22 @@ servidor
 
 servidor.route("/categories/:id").get((req, res) => {
   console.log(req.params);
+  const { id } = req.params;
   // En base al id dado por la URL buscar en la lista de categorias si existe, si no existe indicar en el message que la categoria no existe, caso contrario devolver la categoria, NOTA: usar la posicion de la lista como el ID
-  return res.json({
-    message: "La categoria es",
-  });
+
+  console.log(categories[id]);
+
+  if (categories[id] !== undefined) {
+    return res.json({
+      message: "La categoria es",
+      content: categories[id],
+    });
+  } else {
+    return res.status(400).json({
+      message: "La categoria no existe",
+      content: null,
+    });
+  }
 });
 
 servidor.listen(PORT, () => {
