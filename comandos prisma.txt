@@ -1,0 +1,7 @@
+npx prisma init > inicializa nuestro proyecto con prisma (crea la carpeta prisma)
+
+npx prisma migrate dev > revisa si hay alguna nueva migracion y si la hay nos pedira el nombre
+* --preview-feature > evita la creacion del cliente de prisma (@prisma/client)
+* --create-only > evita que la migracion se ejecute en la bd
+
+npx prisma migrate deploy > ejecuta las migraciones faltantes a realizarse en la bd

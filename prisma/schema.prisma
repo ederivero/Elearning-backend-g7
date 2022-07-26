@@ -31,9 +31,13 @@ model Trabajador {
   password       String         @db.Text
   rol            ROL_TRABAJADOR @default(OBRERO)
   departamentoId Int            @map("departamento_id")
+  supervisorId   Int            @map("supervisor_id")
   // un trabajador pertenece a un departamento
   departamento   Departamento   @relation(fields: [departamentoId], references: [id])
   asistencias    Asistencia[]
+  // Para crear una relacion de una tabla consigo misma se define el nombre de la relacion
+  trabajadores   Trabajador[]   @relation("trabajadores")
+  supervisor     Trabajador     @relation("trabajadores", fields: [supervisorId], references: [id])
 
   @@map("trabajadores")
 }
