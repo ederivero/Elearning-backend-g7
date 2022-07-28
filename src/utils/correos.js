@@ -28,3 +28,23 @@ export const validarCorreo = async ({ destinatario, nombre, token }) => {
     console.log(error.message);
   }
 };
+
+export const cambioPassword = async ({ destinatario, nombre }) => {
+  try {
+    await cliente.sendMail({
+      from: process.env.EMAIL,
+      to: destinatario,
+      subject: "Cambio de password",
+      html: `
+            <h1>Cambio de PASSWORD</h1>
+            <p>Hola ${nombre}, te notificamos que tu password ha sido cambiada, si no fuiste tu reinicia tu contraseña! Caso contrario has caso omiso a este mensaje, gracias. 😀</p>
+            </br>
+            <h3>Atentamente,</h3>
+            </br>
+            <h3>El equipo de backend</h3>
+            `,
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
