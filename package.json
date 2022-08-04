@@ -9,7 +9,8 @@
     "start:dev": "dotenv -e .env -- nodemon ./src/server.js",
     "generar:migracion": "npx prisma migrate dev",
     "crear:migracion": "npx prisma migrate dev --preview-feature --create-only",
-    "ejecutar:migracion": "npx prisma migrate deploy"
+    "ejecutar:migracion": "npx prisma migrate deploy",
+    "start": "node ./src/server.js"
   },
   "repository": {
     "type": "git",

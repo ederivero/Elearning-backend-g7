@@ -182,8 +182,12 @@ export const login = async (req, res) => {
 };
 
 export const perfil = async (req, res) => {
+  console.log(req.user);
+  // agregar en el result el usuario pero sin su password
+
+  const { password, ...result } = req.user;
   return res.json({
     message: null,
-    result: "",
+    result,
   });
 };
