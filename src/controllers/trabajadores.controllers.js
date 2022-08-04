@@ -1,11 +1,16 @@
 import {
   trabajadoresRequestDTO,
   cambiarPasswordRequestDTO,
+  loginRequestDTO,
 } from "../dtos/trabajadores.dto.js";
 import cryptoJs from "crypto-js";
 import bcryptjs from "bcryptjs";
 import { PrismaConnector } from "../prisma.js";
 import { validarCorreo, cambioPassword } from "../utils/correos.js";
+import jwt from "jsonwebtoken";
+
+// porque hay librerias que han sido desarrolladas en CommonJS y como el proyecto esta siendo realizado en EsModule entonces no se logran entender por lo que hay que importar la libreria en su totalidad y luego recien hacer la destructuracion
+const { compareSync } = bcryptjs;
 
 export const postTrabajador = async (req, res) => {
   try {
@@ -136,4 +141,49 @@ export const cambiarPassword = async (req, res) => {
       result: error.message,
     });
   }
+};
+
+export const login = async (req, res) => {
+  const { body } = req;
+  try {
+    const data = loginRequestDTO(body);
+
+    const trabajador = await PrismaConnector.trabajador.findUniqueOrThrow({
+      where: { email: data.email },
+    });
+
+    if (compareSync(data.password, trabajador.password)) {
+      console.log("si es la password");
+      const token = jwt.sign(
+        {
+          id: trabajador.id,
+          message: "Mensaje oculto",
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "2h" }
+        // expiresIn: un numero sera segundos, si es un numero con comillas sera ms, '1 day', '10h', '50d', '1y'
+      );
+
+      return res.json({
+        message: "Bienvenido",
+        result: token,
+      });
+    } else {
+      console.log("contraseña incorrecta");
+
+      throw new Error("Password invalida");
+    }
+  } catch (error) {
+    return res.status(400).json({
+      message: "Error al hacer el login",
+      result: error.message,
+    });
+  }
+};
+
+export const perfil = async (req, res) => {
+  return res.json({
+    message: null,
+    result: "",
+  });
 };
