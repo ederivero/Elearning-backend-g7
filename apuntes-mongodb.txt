@@ -1,0 +1,11 @@
+db > mostrara en que base de datos estoy trabajando
+use <DB_NAME> > usaremos esa base de datos y si no existe la creara PERO no de manera permanente ya que en MONGODB necesito tener al menos una coleccion (tabla) para que la base de datos exista realmente
+db.dropDatabase() > elimina la base de datos PERO no me movera a otra base de datos hasta que yo me salga de ella 
+show dbs > mostrara en un listado todas las bases de datos con sus tamaños
+
+
+db.COLECCION.insertOne({...}) > inserta un registro en la coleccion indicada
+db.COLECCION.f<TAB><TAB> > mostrara un menu con todas las opciones que empiecen con la letra f
+
+
+NOTA: si queremos que un archivo tenga la connotacion de ECMAscript o module entonces en vez de poner "type":"module" en el package.json podemos cambiar la extension a .mjs o si queremos que el archivo trabaje con CommonJS usaremos la extension .cjs

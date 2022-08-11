@@ -1,0 +1,33 @@
+{
+  "name": "mongo-express",
+  "version": "1.0.0",
+  "description": "Proyecto de ecommerce usango mongodb con express",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start:dev": "nodemon ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ederivero/Elearning-backend-g7.git"
+  },
+  "keywords": [
+    "Mongdb",
+    "express",
+    "ecommerce",
+    "codigo"
+  ],
+  "author": "eduardo de rivero",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ederivero/Elearning-backend-g7/issues"
+  },
+  "homepage": "https://github.com/ederivero/Elearning-backend-g7#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.5.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
