@@ -6,7 +6,7 @@ const app = express();
 const port = process.env.PORT ?? 3000; // nullish coalescing operator
 
 mongoose
-  .connect("mongodb://localhost:27017/ecommerce", {
+  .connect(process.env.MONGO_URL, {
     serverSelectionTimeoutMS: 3000,
   })
   .then((value) => {
