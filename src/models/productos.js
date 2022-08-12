@@ -2,13 +2,23 @@ import mongoose from "mongoose";
 
 // Todas las configuraciones de nuestra coleccion que declaremos en mongoose solamente van a servir para mongoose (recordemos que en una bd no relacional podemos agregar lo que queramos), por ende se recomienda NO TOCAR DIRECTAMENTE LA BD SI SE TRABAJA CON MONGOOSE
 
+const unidadMedidaValores = ["Litros", "Kilos", "N/A", "Onzas"];
+
 const detalleProductoSchema = new mongoose.Schema({
   tallas: [mongoose.Schema.Types.String],
   unidadMedida: {
     alias: "unidad_medida",
     type: mongoose.Schema.Types.String,
-    enum: ["Litros", "Kilos", "N/A", "Onzas"],
+    enum: unidadMedidaValores, // solamente sirve al momento de crear una nueva instancia mas no al momento de actualizar o modificar
     default: "N/A",
+    set: (valor) => {
+      console.log(valor);
+      if (unidadMedidaValores.includes(valor)) {
+        return valor;
+      } else {
+        throw new Error();
+      }
+    },
   },
 });
 
