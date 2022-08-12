@@ -22,7 +22,11 @@ const productoSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Decimal128,
     required: true,
     min: 0.0,
-    alias: "precio_venta",
+    // alias: "precio_venta",
+    get: (valor) => {
+      // console.log(valor);
+      return +valor.toString();
+    },
   },
   cantidad: {
     type: mongoose.Schema.Types.Number,
@@ -40,3 +44,15 @@ const productoSchema = new mongoose.Schema({
 
 // esto hace la reacion de la coleccion en la base de datos basandose en el schema previamente definido
 export const productoModel = mongoose.model("productos", productoSchema);
+
+// seteamos el comportamiento en este caso del metodo toJSON para convertir la informacion que tengamos en la llave precio y ademas eliminas la llave __v
+productoSchema.set("toJSON", {
+  getters: true,
+  // transform: (doc, prod) => {
+  //   if (prod.precio) {
+  //     prod.precio = +prod.precio.toString();
+  //   }
+  //   delete prod.__v;
+  //   return prod;
+  // },
+});
