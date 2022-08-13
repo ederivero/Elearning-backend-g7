@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { productoRouter } from "./routes/productos.js";
-
+import { usuarioRouter } from "./routes/usuarios.js";
 const app = express();
 
 app.use(express.json()); // para indicar que la aplicacion de express pueda entender y convertir la informacion que llega del front mediante un formato JSON
@@ -9,6 +9,7 @@ app.use(express.json()); // para indicar que la aplicacion de express pueda ente
 const port = process.env.PORT ?? 3000; // nullish coalescing operator
 
 app.use(productoRouter);
+app.use(usuarioRouter);
 
 mongoose
   .connect(process.env.MONGO_URL, {
