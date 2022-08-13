@@ -1,6 +1,7 @@
 import { usuarioModel } from "../models/usuarios.js";
 import { usuarioRequestDTO, loginRequestDTO } from "../dtos/usuarios.js";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const crearUsuario = async (req, res) => {
   try {
@@ -36,9 +37,17 @@ export const login = async (req, res) => {
       if (bcryptjs.compareSync(data.password, usuarioEncontrado.password)) {
         console.log("si coincide la pwd");
 
+        const token = jwt.sign(
+          {
+            id: usuarioEncontrado._id,
+          },
+          process.env.JWT_SECRET,
+          { expiresIn: "1h" }
+        );
+
         return res.status(200).json({
           message: "Usuario existe",
-          result: null,
+          result: token,
         });
       } else {
         return res.status(200).json({
