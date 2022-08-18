@@ -1,5 +1,6 @@
 import { carritoModel } from "../models/carritos.js";
 import { carritoRequestDTO } from "../dtos/carritos.js";
+import { productoModel } from "../models/productos.js";
 
 export const crearCarrito = async (req, res) => {
   try {
@@ -46,8 +47,25 @@ export const listarCarrito = async (req, res) => {
     const { user } = req;
     const carrito = await carritoModel.findOne({ usuarioId: user._id });
 
+    const detalle = await Promise.all(
+      carrito.detalle.map(async (valor) => {
+        const productoEncontrado = await productoModel.findById(
+          valor.productoId,
+          { nombre: true, precio: true, foto: true }
+        );
+
+        return {
+          productoId: valor.productoId,
+          nombre: productoEncontrado.nombre,
+          precio: productoEncontrado.precio,
+          foto: productoEncontrado.foto,
+          cantidad: valor.cantidad,
+        };
+      })
+    );
+
     return res.json({
-      result: carrito,
+      result: { ...carrito.toJSON(), detalle }, // reemplazar el detalle por el nuevo detalle con la info de los productos
       message: null,
     });
   } catch (error) {

@@ -5,6 +5,14 @@ import { usuarioRouter } from "./routes/usuarios.js";
 import { direccionRouter } from "./routes/direcciones.js";
 import { pagosRouter } from "./routes/pagos.js";
 import { carritoRouter } from "./routes/carritos.js";
+import mercadopago from "mercadopago";
+
+// access_token > token que indicara a que negocio pertenece esta pasarela de pagos, servira para que cuando se realize una venta MP sepa a quien enviar el dinero
+// integrator_id > es el identificador que obtendremos luego de realizar la certificacion para que MP sepa que desarrollador realizo esta integracion
+mercadopago.configure({
+  access_token: process.env.MP_ACCESS_TOKEN,
+  integrator_id: process.env.MP_INTEGRATOR_ID, // opcional
+});
 
 const app = express();
 

@@ -1,10 +1,14 @@
 import { Router } from "express";
 import {
-    crearPreferencia,
-    crearUsuarioDePrueba
-} from '../controllers/pagos.js';
+  crearPreferencia,
+  crearUsuarioDePrueba,
+  crearPago,
+} from "../controllers/pagos.js";
 
-export const pagosRouter = Router()
+import { validarToken } from "../utils/validador.js";
 
-pagosRouter.route('/crearUsuarioDePrueba').post(crearUsuarioDePrueba)
-pagosRouter.route('/crearPreferencia').post(crearPreferencia)
+export const pagosRouter = Router();
+
+pagosRouter.route("/crearUsuarioDePrueba").post(crearUsuarioDePrueba);
+pagosRouter.route("/crearPreferencia").post(crearPreferencia);
+pagosRouter.post("/crear-pago", validarToken, crearPago);
