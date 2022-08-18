@@ -4,6 +4,7 @@ import { productoRouter } from "./routes/productos.js";
 import { usuarioRouter } from "./routes/usuarios.js";
 import { direccionRouter } from "./routes/direcciones.js";
 import { pagosRouter } from "./routes/pagos.js";
+import { carritoRouter } from "./routes/carritos.js";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(productoRouter);
 app.use(usuarioRouter);
 app.use(direccionRouter);
 app.use(pagosRouter);
+app.use(carritoRouter);
 
 mongoose
   .connect(process.env.MONGO_URL, {
@@ -23,7 +25,9 @@ mongoose
   .then((value) => {
     console.log("Base de datos conectada correctamente");
     app.listen(port, () => {
-      console.log(`Servidor corriendo en el puerto ${port}: http://localhost:${port}`);
+      console.log(
+        `Servidor corriendo en el puerto ${port}: http://localhost:${port}`
+      );
     });
   })
   .catch((error) => {
