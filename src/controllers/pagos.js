@@ -2,6 +2,7 @@ import axios from "axios";
 import mercadopago from "mercadopago";
 import { carritoModel } from "../models/carritos.js";
 import { productoModel } from "../models/productos.js";
+import { pedidoModel } from "../models/pedidos.js";
 
 export const crearUsuarioDePrueba = async (req, res) => {
   try {
@@ -92,11 +93,34 @@ export const crearPago = async (req, res) => {
     }, // informacion de la persona que va a pagar
     items,
     notification_url:
-      "https://b77a-190-236-76-55.ngrok.io/mercado-pago-notificaciones", // colocamos la url en la cual mercado pago va a enviar la informacion en tiempo real sobre esta preferencia , mercado pago la conoce como IPN (Instant Payment Notification)
+      "https://b75d-190-236-76-55.ngrok.io/mercado-pago-notificaciones", // colocamos la url en la cual mercado pago va a enviar la informacion en tiempo real sobre esta preferencia , mercado pago la conoce como IPN (Instant Payment Notification)
   });
   console.log(carrito);
 
   console.log(preferencia);
+
+  // Una vez creada la preferencia limpio los items del carrito para que ya la proxima ya no existan esos productos
+  carrito.detalle = [];
+  await carrito.save();
+
+  // metodo basico
+  let total = 0;
+  items.forEach((item) => {
+    total += item.quantity * item.unit_price;
+  });
+
+  // metodo usando reduce
+  total = items.reduce((prevVal, curVal) => {
+    return prevVal + curVal.quantity * curVal.unit_price;
+  }, 0);
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+  await pedidoModel.create({
+    fecha: preferencia.body.date_created,
+    total,
+    estado: "CREADO",
+    preferenceId: preferencia.body.id,
+    usuarioId: user._id,
+  });
 
   return res.json({
     message: "el link es",
