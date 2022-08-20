@@ -59,6 +59,12 @@ export const crearPago = async (req, res) => {
 
   const carrito = await carritoModel.findOne({ usuarioId: user._id });
 
+  if (carrito.detalle.length === 0) {
+    return res.status(400).json({
+      message: "No se puede crear un pago porque el carrito esta vacio",
+    });
+  }
+
   const items = await Promise.all(
     carrito.detalle.map(async (detalle) => {
       const producto = await productoModel.findById(detalle.productoId);
@@ -93,11 +99,8 @@ export const crearPago = async (req, res) => {
     }, // informacion de la persona que va a pagar
     items,
     notification_url:
-      "https://b75d-190-236-76-55.ngrok.io/mercado-pago-notificaciones", // colocamos la url en la cual mercado pago va a enviar la informacion en tiempo real sobre esta preferencia , mercado pago la conoce como IPN (Instant Payment Notification)
+      "https://384a-190-236-76-55.ngrok.io/mercado-pago-notificaciones", // colocamos la url en la cual mercado pago va a enviar la informacion en tiempo real sobre esta preferencia , mercado pago la conoce como IPN (Instant Payment Notification)
   });
-  console.log(carrito);
-
-  console.log(preferencia);
 
   // Una vez creada la preferencia limpio los items del carrito para que ya la proxima ya no existan esos productos
   carrito.detalle = [];
@@ -136,5 +139,36 @@ export const notificacionesMercadoPago = async (req, res) => {
   console.log("los query params son:");
   console.log(req.query);
 
+  if (req.query.topic && req.query.topic === "merchant_order") {
+    const { id } = req.query;
+    // buscare la informacion de esa orden comercial
+    const merchant_order = await mercadopago.merchant_orders.get(id);
+    console.log(merchant_order.body.payments);
+    const pedidoEncontrado = await pedidoModel.findOne({
+      preferenceId: merchant_order.body.preference_id,
+    });
+
+    if (pedidoEncontrado) {
+      pedidoEncontrado.merchantOrderId = merchant_order.body.id;
+
+      const payment = merchant_order.body.payments[0];
+      // la primera vez que llega el merchant_order sera cuando se cree la orden comercial pero ahi no se realizara ningun pago por lo que estara undefined el payment y para evitar que nos lance error validaremos si el payment no es indefinido para luego poder ingresar a su propiedad status
+      if (payment && payment.status === "approved") {
+        pedidoEncontrado.estado = "PAGADO";
+      }
+      if (payment && payment.status === "pending") {
+        pedidoEncontrado.estado = "PENDIENTE";
+      }
+      if (payment && payment.status === "rejected") {
+        pedidoEncontrado.estado = "FALLIDO";
+      }
+      await pedidoEncontrado.save();
+    } else {
+      // envio de correo a soporte@empresa.com
+      console.log(
+        `El pedido con preference id ${merchant_order.body.preference_id} no esta registrado en los pedidos!!`
+      );
+    }
+  }
   return res.status(200).send();
 };

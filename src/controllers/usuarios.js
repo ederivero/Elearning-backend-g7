@@ -35,8 +35,6 @@ export const login = async (req, res) => {
       });
     } else {
       if (bcryptjs.compareSync(data.password, usuarioEncontrado.password)) {
-        console.log("si coincide la pwd");
-
         const token = jwt.sign(
           {
             id: usuarioEncontrado._id,
