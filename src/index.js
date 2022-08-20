@@ -1,5 +1,6 @@
 import express from "express";
 import { productoRouter } from "./routes/productos.js";
+import { comprobanteRouter } from "./routes/comprobantes.js";
 import mongoose from "mongoose";
 
 const app = express();
@@ -7,6 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.use(productoRouter);
+app.use(comprobanteRouter);
 
 const PORT = process.env.PORT ?? 3000;
 
